@@ -8,6 +8,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using WebStore_2020.infrastructure;
+using WebStore_2020.infrastructure.interfaces;
+using WebStore_2020.infrastructure.Services;
 
 namespace WebStore_2020
 {
@@ -23,7 +26,18 @@ namespace WebStore_2020
         public void ConfigureServices(IServiceCollection services)
         {
             //services.AddRouting(options => options.LowercaseUrls = true);
-            services.AddMvc();
+            services.AddMvc(options =>
+            {
+                options.Filters.Add(typeof(SimpleActionFilter));
+
+                // альтернативный вариант подключения
+                //options.Filters.Add(new SimpleActionFilter());
+            });
+
+            // Добавляем разрешение зависимости
+            services.AddSingleton<IEmployeesService, InMemoryEmployeeService>();
+            //services.AddScoped<IEmployeesService, InMemoryEmployeeService>();
+            //services.AddTransient<IEmployeesService, InMemoryEmployeeService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -33,11 +47,58 @@ namespace WebStore_2020
                 app.UseDeveloperExceptionPage();
             }
 
+            app.Map("/index", CustomIndexHandler);
+
+            app.UseMiddleware<TokenMiddleware>();
+
+            UseSampleErrorCheck(app);
+
             app.UseStaticFiles();
 
             //ConfigV22(app, env);
 
             ConfigV31(app, env);
+
+            app.UseWelcomePage();
+
+            RunSample(app);
+
+        }
+
+        private void UseSampleErrorCheck(IApplicationBuilder app)
+        {
+            app.Use(async (context, next) =>
+            {
+                bool isError = false;
+                // ...
+                if (isError)
+                {
+                    await context.Response
+                        .WriteAsync("Error occured. You're in custom pipeline module...");
+                }
+                else
+                {
+                    await next.Invoke();
+                }
+            });
+        }
+
+        private void RunSample(IApplicationBuilder app)
+        {
+            app.Run(async (context) =>
+            {
+                await context.Response.WriteAsync("Привет из конвейера обработки запроса (метод app.Run())");
+            });
+
+        }
+
+        private void CustomIndexHandler(IApplicationBuilder app)
+        {
+            app.Run(async context =>
+            {
+                await context.Response.WriteAsync("Index");
+            });
+
         }
 
         private void ConfigV31(IApplicationBuilder app, IWebHostEnvironment env)
@@ -46,6 +107,8 @@ namespace WebStore_2020
 
             var helloMsg = _configuration["CustomHelloWorld"];
             helloMsg = _configuration["Logging:LogLevel:Default"];
+
+            //app.UseMvcWithDefaultRoute();
 
             app.UseEndpoints(endpoints =>
             {

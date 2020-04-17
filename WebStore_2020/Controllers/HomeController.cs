@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using WebStore_2020.infrastructure;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -17,6 +18,7 @@ namespace WebStore_2020.Controllers
         }
 
         // GET: /<controller>/blog
+        [SimpleActionFilter]
         public IActionResult Blog()
         {
             return View();

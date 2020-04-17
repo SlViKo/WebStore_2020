@@ -3,51 +3,80 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using WebStore_2020.infrastructure.interfaces;
 using WebStore_2020.Models;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace WebStore_2020.Controllers
 {
+    [Route("users")]
     public class EmployeeController : Controller
     {
-        List<EmployeeViewModel> _employeees;
+        private readonly IEmployeesService _employeesService;
 
-        public EmployeeController()
+        public EmployeeController(IEmployeesService employeesService)
         {
-            _employeees = new List<EmployeeViewModel> {
-                new EmployeeViewModel
-                {
-                    Id = 1,
-                    FirstName = "Иван",
-                    SurName = "Иванов",
-                    Patronymic = "Иванович",
-                    Age = 22,
-                    Position = "Начальник"
-                },
-                new EmployeeViewModel
-                {
-                    Id = 2,
-                    FirstName = "Владислав",
-                    SurName = "Петров",
-                    Patronymic = "Иванович",
-                    Age = 35,
-                    Position = "Программист"
-                }
-            };
+            _employeesService = employeesService;
         }
 
-        // GET: /<controller>/
+        [Route("all")]
+        // GET: /users/all
         public IActionResult Index()
         {
             //return Content("Hello from home controller");
-            return View(_employeees);
+            return View(_employeesService.GetAll());
         }
 
-        // GET: /<controller>/details/{id}
+        [Route("{id}")]
+        // GET: /users/{id}
         public IActionResult Details(int id)
         {
-            return View(_employeees.FirstOrDefault(x => x.Id == id));
+            return View(_employeesService.GetById(id));
         }
+
+        [Route("edit/{id?}")]
+        [HttpGet]
+        // GET: /users/edit/{id}
+        public IActionResult Edit(int? id)
+        {
+            if (!id.HasValue)
+                return View(new EmployeeViewModel());
+
+            var model = _employeesService.GetById(id.Value);
+            if (model == null)
+                return NotFound();// возвращаем результат 404 Not Found
+
+
+            return View(model);
+        }
+
+        [Route("edit/{id?}")]
+        [HttpPost]
+        // GET: /users/edit/{id}
+        public IActionResult Edit(EmployeeViewModel model)
+        {
+            if (model.Id > 0) // если есть Id, то редактируем модель
+            {
+                var dbItem = _employeesService.GetById(model.Id);
+
+                if (ReferenceEquals(dbItem, null))
+                    return NotFound();// возвращаем результат 404 Not Found
+
+                dbItem.FirstName = model.FirstName;
+                dbItem.SurName = model.SurName;
+                dbItem.Age = model.Age;
+                dbItem.Patronymic = model.Patronymic;
+                dbItem.Position = model.Position;
+            }
+            else // иначе добавляем модель в список
+            {
+                _employeesService.AddNew(model);
+            }
+            _employeesService.Commit(); // станет актуальным позднее (когда добавим БД)
+
+            return RedirectToAction(nameof(Index));
+        }
+
     }
 }
