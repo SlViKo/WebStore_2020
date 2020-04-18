@@ -14,10 +14,12 @@ namespace WebStore_2020.Controllers
     public class EmployeeController : Controller
     {
         private readonly IEmployeesService _employeesService;
+        private readonly IBookService _bookService;
 
-        public EmployeeController(IEmployeesService employeesService)
+        public EmployeeController(IEmployeesService employeesService, IBookService bookService)
         {
             _employeesService = employeesService;
+            _bookService = bookService;
         }
 
         [Route("all")]
@@ -76,6 +78,21 @@ namespace WebStore_2020.Controllers
             _employeesService.Commit(); // станет актуальным позднее (когда добавим БД)
 
             return RedirectToAction(nameof(Index));
+        }
+
+        public IActionResult Delete(int? id)
+        {
+            var model = _employeesService.GetById(id.Value);
+
+            if (model == null)
+            {
+                return NotFound();
+            }
+
+            _employeesService.Delete(id.Value);
+            _bookService.DeleteAllByOwnerId(id.Value);
+            return RedirectToAction("Index");
+
         }
 
     }

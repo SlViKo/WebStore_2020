@@ -36,6 +36,7 @@ namespace WebStore_2020
 
             // Добавляем разрешение зависимости
             services.AddSingleton<IEmployeesService, InMemoryEmployeeService>();
+            services.AddSingleton<IBookService, InMemoryBookService>();
             //services.AddScoped<IEmployeesService, InMemoryEmployeeService>();
             //services.AddTransient<IEmployeesService, InMemoryEmployeeService>();
         }

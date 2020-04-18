@@ -52,7 +52,15 @@ namespace WebStore_2020.infrastructure.Services
 
         public void AddNew(EmployeeViewModel model)
         {
-            model.Id = _employees.Max(e => e.Id) + 1;
+            if (_employees.Count == 0)
+            {
+                model.Id = 1;
+            }
+            else
+            {
+                model.Id = _employees.Max(e => e.Id) + 1;
+            }
+
             _employees.Add(model);
         }
 
