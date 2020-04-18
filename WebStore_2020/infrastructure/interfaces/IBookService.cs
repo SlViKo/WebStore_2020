@@ -40,6 +40,10 @@ namespace WebStore_2020.infrastructure.interfaces
         /// <param name="id"></param>
         void Delete(int id);
 
+        /// <summary>
+        /// удаление всех книг пользователя
+        /// </summary>
+        /// <param name="ownerId"></param>
         void DeleteAllByOwnerId(int ownerId);
     }
 }
