@@ -1,10 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc.Filters;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System;
+using Microsoft.AspNetCore.Mvc.Filters;
 
-namespace WebStore_2020.infrastructure
+namespace WebStore.infrastructure
 {
     public class SimpleActionFilter : Attribute, IActionFilter
     {

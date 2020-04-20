@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using WebStore_2020.Models;
+using WebStore.Models;
 
-namespace WebStore_2020.Controllers
+namespace WebStore.Controllers
 {
     public class ActionResultsController : Controller
     {

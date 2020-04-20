@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using WebStore_2020.infrastructure;
+﻿using Microsoft.AspNetCore.Mvc;
+using WebStore.infrastructure;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace WebStore_2020.Controllers
+namespace WebStore.Controllers
 {
     public class HomeController : Controller
     {
@@ -50,16 +46,6 @@ namespace WebStore_2020.Controllers
         }
 
         public IActionResult NotFound()
-        {
-            return View();
-        }
-
-        public IActionResult ProductDetails()
-        {
-            return View();
-        }
-
-        public IActionResult Shop()
         {
             return View();
         }

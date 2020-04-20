@@ -1,18 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using WebStore_2020.infrastructure;
-using WebStore_2020.infrastructure.interfaces;
-using WebStore_2020.infrastructure.Services;
+using WebStore.infrastructure;
+using WebStore.infrastructure.interfaces;
+using WebStore.infrastructure.Services;
 
-namespace WebStore_2020
+namespace WebStore
 {
     public class Startup
     {
@@ -37,6 +33,7 @@ namespace WebStore_2020
             // Добавляем разрешение зависимости
             services.AddSingleton<IEmployeesService, InMemoryEmployeeService>();
             services.AddSingleton<IBookService, InMemoryBookService>();
+            services.AddSingleton<IProductService, InMemoryProductService>();
             //services.AddScoped<IEmployeesService, InMemoryEmployeeService>();
             //services.AddTransient<IEmployeesService, InMemoryEmployeeService>();
         }

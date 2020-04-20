@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using WebStore_2020.infrastructure.interfaces;
-using WebStore_2020.Models;
+﻿using Microsoft.AspNetCore.Mvc;
+using WebStore.infrastructure.interfaces;
+using WebStore.Models;
 
-namespace WebStore_2020.Controllers
+namespace WebStore.Controllers
 {
     public class BooksController : Controller
     {

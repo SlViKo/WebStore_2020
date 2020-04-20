@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using WebStore_2020.infrastructure.interfaces;
-using WebStore_2020.Models;
+﻿using Microsoft.AspNetCore.Mvc;
+using WebStore.infrastructure.interfaces;
+using WebStore.Models;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace WebStore_2020.Controllers
+namespace WebStore.Controllers
 {
     [Route("users")]
     public class EmployeeController : Controller
@@ -58,6 +54,11 @@ namespace WebStore_2020.Controllers
         // GET: /users/edit/{id}
         public IActionResult Edit(EmployeeViewModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
             if (model.Id > 0) // если есть Id, то редактируем модель
             {
                 var dbItem = _employeesService.GetById(model.Id);
@@ -80,6 +81,7 @@ namespace WebStore_2020.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [Route("delete/{id?}")]
         public IActionResult Delete(int? id)
         {
             var model = _employeesService.GetById(id.Value);
