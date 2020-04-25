@@ -1,20 +1,25 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using WebStore.DomainNew;
+using System.Text;
+using Microsoft.EntityFrameworkCore;
 using WebStore.DomainNew.Entities;
-using WebStore.infrastructure.interfaces;
 
-namespace WebStore.infrastructure.Services
+namespace WebStore.DAL
 {
-    public class InMemoryProductService : IProductService
+    public static class DbInitializer
     {
-        List<Category> _categories;
-        List<Brand> _brands;
-        List<Product> _products;
-
-        public InMemoryProductService()
+        public static void Initialize(WebStoreContext context)
         {
-            _categories = new List<Category>()
+            //context.Database.EnsureDeleted();
+            context.Database.EnsureCreated();
+            // Look for any products.
+            if (context.Products.Any())
+            {
+                return;   // DB had already been seeded
+            }
+
+            var categories = new List<Category>()
             {
                 new Category()
                 {
@@ -227,7 +232,20 @@ namespace WebStore.infrastructure.Services
                     ParentId = null
                 }
             };
-            _brands = new List<Brand>()
+            using (var trans = context.Database.BeginTransaction())
+            {
+                foreach (var section in categories)
+                {
+                    context.Categories.Add(section);
+                }
+
+                context.Database.ExecuteSqlCommand("SET IDENTITY_INSERT [dbo].[Categories] ON");
+                context.SaveChanges();
+                context.Database.ExecuteSqlCommand("SET IDENTITY_INSERT [dbo].[Categories] OFF");
+                trans.Commit();
+            }
+
+            var brands = new List<Brand>()
             {
                 new Brand()
                 {
@@ -272,7 +290,20 @@ namespace WebStore.infrastructure.Services
                     Order = 6
                 },
             };
-            _products = new List<Product>()
+            using (var trans = context.Database.BeginTransaction())
+            {
+                foreach (var brand in brands)
+                {
+                    context.Brands.Add(brand);
+                }
+
+                context.Database.ExecuteSqlCommand("SET IDENTITY_INSERT [dbo].[ProductBrands] ON");
+                context.SaveChanges();
+                context.Database.ExecuteSqlCommand("SET IDENTITY_INSERT [dbo].[ProductBrands] OFF");
+                trans.Commit();
+            }
+
+            var products = new List<Product>()
             {
                 new Product()
                 {
@@ -395,36 +426,18 @@ namespace WebStore.infrastructure.Services
                     BrandId = 3
                 },
             };
-        }
-
-        public IEnumerable<Category> GetCategories()
-        {
-            return _categories;
-        }
-
-        public IEnumerable<Brand> GetBrands()
-        {
-            return _brands;
-        }
-
-        public IEnumerable<Product> GetProducts(ProductFilter filter)
-        {
-            var products = _products;
-
-            if (filter.CategoryId.HasValue)
+            using (var trans = context.Database.BeginTransaction())
             {
-                products = products
-                    .Where(x => x.CategoryId == filter.CategoryId.Value)
-                    .ToList();
+                foreach (var product in products)
+                {
+                    context.Products.Add(product);
+                }
+                context.Database.ExecuteSqlCommand("SET IDENTITY_INSERT [dbo].[Products] ON");
+                context.SaveChanges();
+                context.Database.ExecuteSqlCommand("SET IDENTITY_INSERT [dbo].[Products] OFF");
+                trans.Commit();
             }
-            if (filter.BrandId.HasValue)
-            {
-                products = products
-                    .Where(p => p.BrandId.HasValue && p.BrandId.Value == filter.BrandId.Value)
-                    .ToList();
-            }
-
-            return products;
         }
     }
 }
+

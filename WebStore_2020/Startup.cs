@@ -1,12 +1,15 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using WebStore.DAL;
 using WebStore.infrastructure;
 using WebStore.infrastructure.interfaces;
 using WebStore.infrastructure.Services;
+using WebStore.Infrastructure.Services;
 
 namespace WebStore
 {
@@ -30,10 +33,13 @@ namespace WebStore
                 //options.Filters.Add(new SimpleActionFilter());
             });
 
+            services.AddDbContext<WebStoreContext>(options => options
+                .UseSqlServer(_configuration.GetConnectionString("DefaultConnection")));
+
             // Добавляем разрешение зависимости
             services.AddSingleton<IEmployeesService, InMemoryEmployeeService>();
             services.AddSingleton<IBookService, InMemoryBookService>();
-            services.AddSingleton<IProductService, InMemoryProductService>();
+            services.AddScoped<IProductService, SqlProductService>();
             //services.AddScoped<IEmployeesService, InMemoryEmployeeService>();
             //services.AddTransient<IEmployeesService, InMemoryEmployeeService>();
         }
