@@ -12,8 +12,8 @@ namespace WebStore.DomainNew.Entities
         /// Родительская секция (при наличии)
         /// </summary>
         public int? ParentId { get; set; }
-
         public int Order { get; set; }
+        public double Discount { get; set; }
 
         [ForeignKey("ParentId")]
         public virtual Category ParentCategory { get; set; }

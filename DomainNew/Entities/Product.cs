@@ -13,6 +13,7 @@ namespace WebStore.DomainNew.Entities
         public string ImageUrl { get; set; }
         public decimal Price { get; set; }
         public string Manufacturer { get; set; }
+        public string Gender { get; set; }
 
 
         [ForeignKey("CategoryId")] // не обязательно в целом
