@@ -1,11 +1,14 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using System;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using WebStore.DAL;
+using WebStore.DomainNew.Entities;
 using WebStore.infrastructure;
 using WebStore.infrastructure.interfaces;
 using WebStore.infrastructure.Services;
@@ -36,6 +39,40 @@ namespace WebStore
             services.AddDbContext<WebStoreContext>(options => options
                 .UseSqlServer(_configuration.GetConnectionString("DefaultConnection")));
 
+            services.AddIdentity<User, IdentityRole>()
+                .AddEntityFrameworkStores<WebStoreContext>()
+                .AddDefaultTokenProviders();
+
+            services.Configure<IdentityOptions>(options => // необязательно
+            {
+                // Password settings
+                options.Password.RequireDigit = false;
+                options.Password.RequiredLength = 5;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireLowercase = false;
+
+                // Lockout settings
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(30);
+                options.Lockout.MaxFailedAccessAttempts = 10;
+                options.Lockout.AllowedForNewUsers = true;
+
+                // User settings
+                options.User.RequireUniqueEmail = true;
+            });
+
+            services.ConfigureApplicationCookie(options => // необязательно
+            {
+                // Cookie settings
+                //options.Cookie.HttpOnly = true;
+                //options.Cookie.Expiration = TimeSpan.FromDays(150);
+                options.LoginPath = "/Account/Login"; // If the LoginPath is not set here, ASP.NET Core will default to /Account/Login
+                options.LogoutPath = "/Account/Logout"; // If the LogoutPath is not set here, ASP.NET Core will default to /Account/Logout
+                options.AccessDeniedPath = "/Account/AccessDenied"; // If the AccessDeniedPath is not set here, ASP.NET Core will default to /Account/AccessDenied
+                options.SlidingExpiration = true;
+            });
+
             // Добавляем разрешение зависимости
             services.AddSingleton<IEmployeesService, InMemoryEmployeeService>();
             services.AddSingleton<IBookService, InMemoryBookService>();
@@ -47,17 +84,20 @@ namespace WebStore
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
-            {
+            { 
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseStaticFiles();
+
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.Map("/index", CustomIndexHandler);
 
             app.UseMiddleware<TokenMiddleware>();
 
             UseSampleErrorCheck(app);
-
-            app.UseStaticFiles();
 
             //ConfigV22(app, env);
 
