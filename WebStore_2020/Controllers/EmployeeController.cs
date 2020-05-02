@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using WebStore.infrastructure.interfaces;
 using WebStore.Models;
 
@@ -7,6 +8,7 @@ using WebStore.Models;
 namespace WebStore.Controllers
 {
     [Route("users")]
+    [Authorize]
     public class EmployeeController : Controller
     {
         private readonly IEmployeesService _employeesService;
@@ -20,6 +22,7 @@ namespace WebStore.Controllers
 
         [Route("all")]
         // GET: /users/all
+        [AllowAnonymous]
         public IActionResult Index()
         {
             //return Content("Hello from home controller");
@@ -28,6 +31,7 @@ namespace WebStore.Controllers
 
         [Route("{id}")]
         // GET: /users/{id}
+        [Authorize(Roles = "Admins,Users")]
         public IActionResult Details(int id)
         {
             return View(_employeesService.GetById(id));
@@ -36,6 +40,7 @@ namespace WebStore.Controllers
         [Route("edit/{id?}")]
         [HttpGet]
         // GET: /users/edit/{id}
+        [Authorize(Roles = "Admins")]
         public IActionResult Edit(int? id)
         {
             if (!id.HasValue)
@@ -52,6 +57,7 @@ namespace WebStore.Controllers
         [Route("edit/{id?}")]
         [HttpPost]
         // GET: /users/edit/{id}
+        [Authorize(Roles = "Admins")]
         public IActionResult Edit(EmployeeViewModel model)
         {
             if (!ModelState.IsValid)
@@ -82,6 +88,7 @@ namespace WebStore.Controllers
         }
 
         [Route("delete/{id?}")]
+        [Authorize(Roles = "Admins")]
         public IActionResult Delete(int? id)
         {
             var model = _employeesService.GetById(id.Value);

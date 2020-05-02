@@ -2,7 +2,7 @@
 {
     public interface INamedEntity : IBaseEntity
     {
-        int Id { get; set; }
+        new int Id { get; set; }
         string Name { get; set; }
     }
 }

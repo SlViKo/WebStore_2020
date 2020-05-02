@@ -11,6 +11,7 @@ using WebStore.DAL;
 using WebStore.DomainNew.Entities;
 using WebStore.infrastructure;
 using WebStore.infrastructure.interfaces;
+using WebStore.Infrastructure.Interfaces;
 using WebStore.infrastructure.Services;
 using WebStore.Infrastructure.Services;
 
@@ -79,6 +80,9 @@ namespace WebStore
             services.AddScoped<IProductService, SqlProductService>();
             //services.AddScoped<IEmployeesService, InMemoryEmployeeService>();
             //services.AddTransient<IEmployeesService, InMemoryEmployeeService>();
+
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddScoped<ICartService, CookieCartService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -89,6 +93,7 @@ namespace WebStore
             }
 
             app.UseStaticFiles();
+            app.UseRouting();
 
             app.UseAuthentication();
             app.UseAuthorization();
@@ -105,7 +110,7 @@ namespace WebStore
 
             app.UseWelcomePage();
 
-            RunSample(app);
+            //RunSample(app);
 
         }
 
