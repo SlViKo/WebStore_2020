@@ -35,5 +35,12 @@ namespace WebStore.Infrastructure.Services
 
             return query.ToList();
         }
+
+
+        public Product GetProductById(int id)
+        {
+            var product = _context.Products.FirstOrDefault(x => x.Id == id);
+            return product;
+        }
     }
 }

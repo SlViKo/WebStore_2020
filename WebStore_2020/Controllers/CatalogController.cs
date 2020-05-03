@@ -40,9 +40,20 @@ namespace WebStore.Controllers
             return View(model);
         }
 
-        public IActionResult ProductDetails()
+        public IActionResult ProductDetails(int id)
         {
-            return View();
+            var product = _productService.GetProductById(id);
+            var model = new ProductViewModel()
+            {
+                Id = product.Id,
+                Name = product.Name,
+                Brand = _productService.GetBrands().FirstOrDefault(x => x.Id == product.BrandId).Name ?? "Отсутствует",
+                ImageUrl = product.ImageUrl,
+                Price = product.Price,
+                Order = product.Order,
+
+            };
+            return View(model);
         }
 
 
