@@ -78,6 +78,7 @@ namespace WebStore
             services.AddSingleton<IEmployeesService, InMemoryEmployeeService>();
             services.AddSingleton<IBookService, InMemoryBookService>();
             services.AddScoped<IProductService, SqlProductService>();
+            services.AddScoped<IOrdersService, SqlOrdersService>();
             //services.AddScoped<IEmployeesService, InMemoryEmployeeService>();
             //services.AddTransient<IEmployeesService, InMemoryEmployeeService>();
 
@@ -88,7 +89,7 @@ namespace WebStore
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
-            { 
+            {
                 app.UseDeveloperExceptionPage();
             }
 
@@ -162,9 +163,14 @@ namespace WebStore
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
+                    name: "areas",
+                    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+                );
+
+                endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
-                              // GET: /<controller>/details/{id}
+                // GET: /<controller>/details/{id}
 
                 //endpoints.MapGet("/", async context => { await context.Response.WriteAsync(helloMsg); });
             });

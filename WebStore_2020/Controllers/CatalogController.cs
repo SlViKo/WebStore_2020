@@ -32,7 +32,8 @@ namespace WebStore.Controllers
                         ImageUrl = p.ImageUrl,
                         Name = p.Name,
                         Order = p.Order,
-                        Price = p.Price
+                        Price = p.Price,
+                        Brand = p.Brand?.Name ?? string.Empty
                     }).OrderBy(p => p.Order)
                     .ToList()
             };
@@ -43,6 +44,11 @@ namespace WebStore.Controllers
         public IActionResult ProductDetails(int id)
         {
             var product = _productService.GetProductById(id);
+            if (product == null)
+            {
+                return NotFound();
+            }
+
             var model = new ProductViewModel()
             {
                 Id = product.Id,
