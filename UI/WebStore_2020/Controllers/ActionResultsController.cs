@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 using Microsoft.AspNetCore.Mvc;
-using WebStore.Models;
+using WebStore.DomainNew.Models;
 
 namespace WebStore.Controllers
 {

@@ -1,7 +1,4 @@
-﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-
-namespace WebStore.infrastructure
+﻿namespace WebStore.Services.Products
 {
     public class TokenMiddleware
     {

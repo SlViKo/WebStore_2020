@@ -1,8 +1,8 @@
 ﻿using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using WebStore.DomainNew;
-using WebStore.infrastructure.interfaces;
-using WebStore.Models;
+using WebStore.DomainNew.Models;
+using WebStore.Interfaces.Services;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 

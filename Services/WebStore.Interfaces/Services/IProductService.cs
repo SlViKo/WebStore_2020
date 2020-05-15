@@ -1,8 +1,4 @@
-﻿using System.Collections.Generic;
-using WebStore.DomainNew;
-using WebStore.DomainNew.Entities;
-
-namespace WebStore.infrastructure.interfaces
+﻿namespace WebStore.Interfaces.Services
 {
     public interface IProductService
     {

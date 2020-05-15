@@ -1,15 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Newtonsoft.Json;
-using WebStore.DomainNew;
-using WebStore.infrastructure.interfaces;
-using WebStore.Infrastructure.Interfaces;
-using WebStore.Models;
+﻿using WebStore.Interfaces.Services;
 
-namespace WebStore.Infrastructure.Services
+namespace WebStore.Services.Products.Services
 {
     public class CookieCartService : ICartService
     {

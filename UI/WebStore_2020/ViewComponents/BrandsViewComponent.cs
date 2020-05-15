@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using WebStore.infrastructure.interfaces;
-using WebStore.Models;
+using WebStore.DomainNew.Models;
+using WebStore.Interfaces.Services;
 
 namespace WebStore.ViewComponents
 {

@@ -1,12 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Microsoft.EntityFrameworkCore;
-using WebStore.DAL;
-using WebStore.DomainNew;
-using WebStore.DomainNew.Entities;
-using WebStore.infrastructure.interfaces;
+﻿using WebStore.Interfaces.Services;
 
-namespace WebStore.Infrastructure.Services
+namespace WebStore.Services.Products.Services
 {
     public class SqlProductService : IProductService
     {

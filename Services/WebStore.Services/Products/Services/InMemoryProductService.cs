@@ -1,10 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using WebStore.DomainNew;
-using WebStore.DomainNew.Entities;
-using WebStore.infrastructure.interfaces;
+﻿using WebStore.Interfaces.Services;
 
-namespace WebStore.infrastructure.Services
+namespace WebStore.Services.Products.Services
 {
     public class InMemoryProductService : IProductService
     {

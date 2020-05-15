@@ -9,11 +9,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using WebStore.DAL;
 using WebStore.DomainNew.Entities;
-using WebStore.infrastructure;
-using WebStore.infrastructure.interfaces;
-using WebStore.Infrastructure.Interfaces;
-using WebStore.infrastructure.Services;
-using WebStore.Infrastructure.Services;
+using WebStore.Interfaces.Services;
+using WebStore.Services.Products;
+using WebStore.Services.Products.Services;
 
 namespace WebStore
 {

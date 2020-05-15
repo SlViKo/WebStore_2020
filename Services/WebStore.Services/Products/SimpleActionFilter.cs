@@ -1,7 +1,4 @@
-﻿using System;
-using Microsoft.AspNetCore.Mvc.Filters;
-
-namespace WebStore.infrastructure
+﻿namespace WebStore.Services.Products
 {
     public class SimpleActionFilter : Attribute, IActionFilter
     {

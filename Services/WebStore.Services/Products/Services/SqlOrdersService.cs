@@ -1,16 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices.ComTypes;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using WebStore.DAL;
-using WebStore.DomainNew.Entities;
-using WebStore.Infrastructure.Interfaces;
-using WebStore.Models;
+﻿using WebStore.Interfaces.Services;
 
-namespace WebStore.Infrastructure.Services
+namespace WebStore.Services.Products.Services
 {
     public class SqlOrdersService : IOrdersService
     {
